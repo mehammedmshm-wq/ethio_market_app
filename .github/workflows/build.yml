@@ -28,7 +28,8 @@ jobs:
         run: |
           mkdir -p temp_lib
           cp Main.dart temp_lib/main.dart 2>/dev/null || cp main.dart temp_lib/main.dart 2>/dev/null || true
-          flutter create . --project-name ethio_market_app --force
+          rm -rf pubspec.yaml lib test ios android web linux macos windows
+          flutter create . --project-name ethio_market_app
           cp temp_lib/main.dart lib/main.dart
 
       - name: Build Release APK

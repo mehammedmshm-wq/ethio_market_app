@@ -24,13 +24,15 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Create Flutter Project
+      - name: Clean Build Setup
         run: |
-          mkdir -p temp_lib
-          cp Main.dart temp_lib/main.dart 2>/dev/null || cp main.dart temp_lib/main.dart 2>/dev/null || true
-          rm -rf pubspec.yaml lib test ios android web linux macos windows
-          flutter create . --project-name ethio_market_app
-          cp temp_lib/main.dart lib/main.dart
+          mkdir -p temp_dir
+          cp Main.dart temp_dir/main.dart 2>/dev/null || cp main.dart temp_dir/main.dart 2>/dev/null || true
+          # Remove everything except workflow and Main.dart
+          find . -maxdepth 1 ! -name '.' ! -name '..' ! -name '.git' ! -name '.github' ! -name 'Main.dart' ! -name 'main.dart' -exec rm -rf {} +
+          flutter create . --org com.ethio.market --project-name ethio_market_app --platforms=android
+          mkdir -p lib
+          cp temp_dir/main.dart lib/main.dart 2>/dev/null || true
 
       - name: Build Debug APK
         run: flutter build apk --debug
